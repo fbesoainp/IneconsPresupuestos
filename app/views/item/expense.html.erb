@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Inecons Presupuestos</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <%= javascript_include_tag 'application', async: Rails.env.production?, :cache => 'cached/all' %>
+    <meta name="viewport" content="with=device-width, initial-scale=1"
+</head>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+
+<div style="margin:10px;padding:0">
+  <% flash.each do |type, msg| %>
+    <%if type == "error"%>
+      <div class = "alert alert-danger errors">
+        <%= msg %>
+      </div>
+    <%elsif type == "success"%>
+      <div class = "alert alert-success">
+        <%= msg %>
+      </div>
+    <% end %>
+<% end %>
+
+<div class="panel panel-default">  
+<div class="panel-heading">
+    <h2><%= "#{itemIndex(@item.id)}. #{@item.name} #{indexSubCalculator(@item.id)}" %></h2>
+</div> 
+</div> 
+
+<div class="panel panel-default">
+  <div class="panel-heading", style="margin-bottom: 10px">
+  <div class="panel-heading-container">
+  <h4> <strong> Materiales </strong> </h4>
+  <button type="button" class="btn btn-primary btn-lg" onclick="window.opener.location.reload();window.close();">
+  Volver
+  </button>
+  </div>
+  </div>
+
+<table class= "table" id="example">
+    <thead>
+    <tr>
+        <th >Codigo</th>
+        <th >Nombre</th>
+        <th >Unidad</th>
+        <th >Descripcion</th>
+        <th >Categoria</th>
+        <th >Precio</th>
+        <th  colspan="1">Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @materials.each do |material| %>
+    <% @currentMaterial = material %>
+    <tr>
+        <td><%= material.code %></td>  
+        <td><%= material.name %></td>
+        <td><%= material.unity %></td>
+        <td><%= material.description %></td>
+        <td><%= material.category %></td>
+        <td><%= material.price %></td>
+        <td><div style="display: flex;gap:10px;align-items: center;">
+                        
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target=<%="#expenseForm#{material.id}"%>>
+        <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+        </div></td>
+
+        <!-- Expense Form -->
+        <div class="modal fade" id=<%="expenseForm#{material.id}"%> tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Añadir Gasto</h4>
+            </div>
+            <div class="modal-body">
+            <%= form_with(model: @expense, method: :post, local: true) do |form| %>
+                <div class="form-group">
+                    <%=form.label :Cantidad, :class => "control-label"%>
+                    
+                        <%=form.number_field :quantity, step: :any, :class => "form-control" %>
+            
+                        <%= form.hidden_field :item_id, :value => @item.id %>
+                        <%= form.hidden_field :material_id, :value => @currentMaterial.id %>
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>
+                    <input type="submit" name="" value="Crear" class="btn btn-primary">
+                </div>
+            <% end %>
+            </div>
+            </div>
+        </div>
+        </div>
+
+    </tr>
+    <% end %>
+    </tbody>
+        <tfoot>
+            <tr>
+                <th >Codigo</th>
+                <th >Nombre</th>
+                <th >Unidad</th>
+                <th >Descripcion</th>
+                <th >Categoria</th>
+                <th >Precio</th>
+                <th  colspan="1">Acciones</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<br>
+<div class="panel panel-default">
+  <div class="panel-heading", style="margin-bottom: 10px">
+  <div class="panel-heading-container">
+  <h4> <strong> Gastos </strong> </h4>
+  </div>
+  </div>
+<table class= "table" id="example2", style= "max-width: 98%;">
+    <thead>
+    <tr>
+        <th >Codigo</th>
+        <th >Nombre</th>
+        <th >Unidad</th>
+        <th >Descripcion</th>
+        <th >Categoria</th>
+        <th >Precio</th>
+        <th >Cantidad</th>
+        <th >Total</th>
+        <th  colspan="1">Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @expenses.each do |expense| %>
+    <% @currentExpense = expense %>
+    <tr>
+        <td><%= expense.material.code %></td>  
+        <td><%= expense.material.name %></td>
+        <td><%= expense.material.unity %></td>
+        <td><%= expense.material.description %></td>
+        <td><%= expense.material.category %></td>
+        <td><%= expense.material.price %></td>
+        <td><%= expense.quantity %></td>
+        <td><%= expense.quantity * expense.material.price %></td>
+        <td><div style="display: flex;gap:10px;align-items: center;">
+
+        <%= button_to expenseDeleteIndex_path(expense.id), :method => :delete, :class => "btn btn-danger btn-sm" do %>
+            <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+
+        </div></td>
+    </tr>
+    <% end %>
+    </tbody>
+        <tfoot>
+            <tr>
+                <th >Codigo</th>
+                <th >Nombre</th>
+                <th >Unidad</th>
+                <th >Descripcion</th>
+                <th >Categoria</th>
+                <th >Precio</th>
+                <th >Cantidad</th>
+                <th >Total</th>
+                <th  colspan="1">Acciones</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div stlye"display: flex;justify-content: center;align-items: center;">
+<button type="button" class="btn btn-primary btn-lg" onclick="window.opener.location.reload();window.close();" style=>
+Volver
+</button>
+</div>
+</div>
+

@@ -1,0 +1,149 @@
+<ul class="list-group">
+    <% originalIndex = @index %>
+    <% @items.each do |item| %>
+        <% @currentItem = item %>
+        <li class="list-group-item">
+        <div class='item-container'>
+            <div style="display: flex;gap:10px;align-items: center;">
+                <% if item.class.name == "Item"%>
+                    <div style="width: 160px">
+
+                        <h4><%=truncate "#{@index}.#{item.index} #{item.name}", length: 15, separator: /\w+/%></h4>
+                    </div>
+
+                    <% if item.items.length() > 0 || item.expenses.length() > 0%>
+
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" href=<%="##{item.id}"%>>
+                        <span class="glyphicon glyphicon-menu-down"></span>
+                        </button>
+
+                    <% else %>
+
+                        <button type="button" class="btn btn-default" data-toggle="collapse"%>
+                        <span class="glyphicon glyphicon-menu-down"></span>
+                        </button>
+
+                    <% end %>
+
+                    <button type="button" class="btn btn-success" onclick="window.open(<%="'#{itemExpenses_path(item.id)}'"%>,
+                    'exam_dialog','toolbar=no,location=no,menubar=no,scrollbars=yes,resizable=no,,width=860,height=600')">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=<%="#subItemForm#{item.id}"%>>
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    </button>
+
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target=<%="#editForm#{item.id}"%>>
+                    <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                    <%= button_to itemDelete_path(item.id), :method => :delete, :class => "btn btn-danger btn-sm" do %>
+                        <span class="glyphicon glyphicon-trash"></span>
+                    <% end %>
+
+                    <!-- Edit Form -->
+                    <div class="modal fade" id=<%="editForm#{item.id}"%> tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Editar Item</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                        <%= form_with(model: @currentItem, method: :patch, local: true) do |form| %>
+                            <div class="form-group">
+                                <%=form.label :Nombre, :class => "control-label"%>
+                                
+                                    <%=form.text_field :name, :class => "form-control"%>
+                            </div>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>
+                                <input type="submit" name="" value="Editar" class="btn btn-primary">
+                            </div>
+                        <% end %>
+
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- SubItem Form -->
+                    <div class="modal fade" id=<%="subItemForm#{item.id}"%> tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Añadir SubItem</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                        <%= form_with(model: @item, method: :post, local: true) do |form| %>
+                            <div class="form-group">
+                                <%=form.label :Nombre, :class => "control-label"%>
+                                
+                                    <%=form.text_field :name, :class => "form-control"%>
+                            </div>
+                        
+                            <%= form.hidden_field :index, :value => indexSubCalculator(@currentItem.id) %>
+                            <%= form.hidden_field :item_id, :value => @currentItem.id %>
+                            <%= form.hidden_field :project_id, :value => params[:id] %>
+                            <%= form.hidden_field :isMain, :value => false %>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>
+                                <input type="submit" name="" value="Crear" class="btn btn-primary">
+                            </div>
+                        <% end %>
+
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    </div>  
+                    <h4><%="SubTotal: #{itemExpenses(item)}"%></h4>
+                    
+                
+                <% else %>
+                    <div style="width: 160px">
+                    
+                        <h4><%=truncate "#{@index}.#{item.index} #{item.material.name}", length: 15, separator: /\w+/%></h4>
+                        
+                        
+
+                    </div>
+                    
+                    <button type="button" class="btn btn-default" data-toggle="collapse"%>
+                    <span class="glyphicon glyphicon-menu-down"></span>
+                    </button>
+
+                    <%= button_to expenseDelete_path(item.id), :method => :delete, :class => "btn btn-danger btn-sm" do %>
+                        <span class="glyphicon glyphicon-trash"></span>
+                    <% end %>
+                    
+                    </div>  
+                    <h4><%="SubTotal: #{item.material.price * item.quantity}"%></h4>
+                    
+                        
+                <% end %>
+
+            
+        </div>
+        </li>
+
+    <% if item.class.name == "Item"%>
+        <!-- Sub Iem -->
+        <div class="collapse" id=<%="#{item.id}"%>>
+            <div class="card card-body">
+            <%= itemTableGenerator(item,"#{@index}.#{item.index}") %>
+            </div>
+        </div>
+
+    <% @index = originalIndex %>
+    
+    <% end %>
+    <% end %>
+  
+    
+</ul>

@@ -1,0 +1,118 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "jquery.dataTables.min.js" %>
+  <% end %>
+<div class="panel panel-default">
+  <div class="panel-heading", style="margin-bottom: 10px">
+  <div class="panel-heading-container">
+  <h4> <strong> Materiales </strong> </h4>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Registrar Material
+  </button>
+  </div>
+  </div>
+<table class= "table" id="example", style= "max-width: 98%;">
+    <thead>
+    <tr>
+        <th >Codigo</th>
+        <th >Nombre</th>
+        <th >Unidad</th>
+        <th >Descripcion</th>
+        <th >Categoria</th>
+        <th >Precio</th>
+        <th  colspan="1">Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @materials.each do |material| %>
+    <% @materialEdit = material %>
+    <tr>
+        <td><%= material.code %></td>  
+        <td><%= material.name %></td>
+        <td><%= material.unity %></td>
+        <td><%= material.description %></td>
+        <td><%= material.category %></td>
+        <td><%= material.price %></td>
+        <td><div style="display: flex;gap:10px;align-items: center;">
+                        
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target=<%="#editForm#{material.id}"%>>
+        <span class="glyphicon glyphicon-edit"></span>
+        </button>
+
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target=<%="#deleteConfirmation#{material.id}"%>>
+        <span class="glyphicon glyphicon-trash"></span>
+        </button>
+
+        </div></td>
+
+    </tr>
+    <!-- Edit Form -->
+        <div class="modal fade" id=<%="editForm#{material.id}"%> tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Editar Material</h4>
+            </div>
+            <div class="modal-body">
+                <%= render "editForm" %>
+            </div>
+            </div>
+        </div>
+        </div>
+    <!-- Delete Confirmation -->
+        <div class="modal fade" id=<%="deleteConfirmation#{material.id}"%> tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">Eliminar</h5>
+                </div>
+                <div style="text-align: center;">
+                    <h1 class="glyphicon glyphicon-info-sign"></h1>
+                    <h3><%= "¿Esta seguro de eliminar #{material.code}?"%></h3>
+                </div>
+                
+                <div class="modal-footer">
+                    <div style="display: flex;gap:10px;align-items: center;">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Volver</button>
+                        <%= button_to "Eliminar", materialDelete_path(material.id), class: "btn btn-default", :method => :delete %>
+                    </div>
+                </div>
+
+            </div>
+    <% end %>
+    </tbody>
+        <tfoot>
+            <tr>
+                <th >Codigo</th>
+                <th >Nombre</th>
+                <th >Unidad</th>
+                <th >Descripcion</th>
+                <th >Categoria</th>
+                <th >Precio</th>
+                <th  colspan="1">Acciones</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<!-- New Form -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Registrar Material</h4>
+      </div>
+      <div class="modal-body">
+        <%= render "newForm" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<br>
+<%= button_to "Volver", home_path, :method => :get, class: "btn btn-primary" %>

@@ -1,0 +1,102 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+  <div class="panel-heading-container">
+  <h4> <strong> Proyectos </strong> </h4>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Crear Presupuesto
+  </button>
+  </div>
+  </div>
+<table class= "table">
+
+    <thead>
+    <tr>
+        <th >Nombre</th>
+        <th >Ubicacion</th>
+        <th >Fecha</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @projects.each do |project| %>
+        <% @currentProject = project %>
+        <tr>
+            <td><%= project.name %></td>
+            <td><%= project.location %></td>
+            <td><%= project.date %></td>
+
+            <td><div style="display: flex;gap:10px;align-items: center;">
+            
+                <%= button_to "ver detalle", projectShow_path(project.id), class: "btn btn-primary", :method => :get %>
+
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target=<%="#editForm#{project.id}"%>>
+                <span class="glyphicon glyphicon-edit"></span>
+                </button>
+
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target=<%="#deleteConfirmation#{project.id}"%>>
+                <span class="glyphicon glyphicon-trash"></span>
+                </button>
+
+            </div></td>
+
+        </tr>
+        <!-- Edit Form -->
+        <div class="modal fade" id=<%="editForm#{project.id}"%> tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Editar Presupuesto</h4>
+            </div>
+            <div class="modal-body">
+                <%= render "editForm" %>
+            </div>
+            </div>
+        </div>
+        </div>
+        <!-- Delete Confirmation -->
+        <div class="modal fade" id=<%="deleteConfirmation#{project.id}"%> tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">Eliminar</h5>
+                </div>
+                <div style="text-align: center;">
+                    <h1 class="glyphicon glyphicon-info-sign"></h1>
+                    <h3><%= "¿Esta seguro de eliminar #{project.name}?"%></h3>
+                </div>
+                
+                <div class="modal-footer">
+                    <div style="display: flex;gap:10px;align-items: center;">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Volver</button>
+                        <%= button_to "Eliminar", projectDelete_path(project.id), class: "btn btn-default", :method => :delete %>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+        
+        </div>
+    <% end %>
+    </tbody>
+</table>
+</div>
+
+<!-- New Form -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Crear Presupuesto</h4>
+      </div>
+      <div class="modal-body">
+        <%= render "newForm" %>
+      </div>
+    </div>
+  </div>
+</div>
+

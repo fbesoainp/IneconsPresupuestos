@@ -1,0 +1,12 @@
+<%= form_with(model: @currentItem, method: :patch, local: true) do |form| %>
+    <div class="form-group">
+        <%=form.label :Nombre, :class => "control-label"%>
+        
+            <%=form.text_field :name, :class => "form-control"%>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>
+        <input type="submit" name="" value="Editar" class="btn btn-primary">
+    </div>
+<% end %>

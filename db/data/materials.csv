@@ -1,0 +1,4 @@
+Codigo,Nombre,Unidad,Descripcion,Precio,Categoria
+F100,Flete,u/c,Flete a x lugar,100000,Transporte
+M100,Maestros,hr,Valor maestro por hora,3000,Mano de Obra
+PL100,Plancha Madera,M,Planchas de madera,5000,Materiales

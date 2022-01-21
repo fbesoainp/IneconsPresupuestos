@@ -1,0 +1,29 @@
+<tr> HOLA </tr>
+<% @items.each do |item| %>
+    <% if item.class.name == "Item"%>
+        <tr>
+            <th><h4><%="#{@index}.#{item.index}."%></h4></th>
+            <th style="line-height: 40px;"><h4><strong><%=item.name%></strong></h4></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        <%= reportItems(item,"#{@index}.#{item.index}") %>
+
+    <% else %>
+
+        <tr>
+            <th><h4><%="#{@index}.#{item.index}."%></h4></th>
+            <th style="line-height: 40px;"><h4><%=item.material.name%></h4></th>
+            <th><h4><%=item.material.description%></h4></th>
+            <th><h4><%=item.material.unity%></h4></th>
+            <th><h4><%=item.quantity%></h4></th>
+            <th><h4><%=item.material.price%></h4></th>
+            <th><h4><%=item.material.price * item.quantity%></h4></th>
+            <th></th>
+        </tr>
+
+    <% end %>
+<% end %>

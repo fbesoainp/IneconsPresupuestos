@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Inecons Presupuestos</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', async: Rails.env.production?, :cache => 'cached/all' %>
+    <meta name="viewport" content="with=device-width, initial-scale=1">
+  </head>
+<body>
+
+<div class="report-container" style="margin-left: 40px;margin-right: 40px;margin-top: 10px;margin-bottom: 10px;">
+
+    <div class="tittle-container" style=
+    "margin:0 auto;border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    text-align: center;
+    margin-bottom: 15px;
+    background-color: rgb(214, 212, 212);">
+        <h1> PRESUPUESTO OFICIAL </h1>
+    </div>
+
+    <div class="info-container" style=
+    "margin:0 auto;border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    text-align: center;
+    margin-bottom: 15px;">
+
+        <div style="display: flex;gap:10px;align-items: center;height:25px;margin-top:5px">
+            <h3 style="width: 130px; text-align: left; margin-left: 10px"> PROYECTO </h3>
+            <h3 style="margin-left: 40px;"> : </h3>
+            <h3> <%= @project.name %> </h3>
+        </div>
+
+        <div style="display: flex;gap:10px;align-items: center;height:25px;margin-top:5px">
+            <h3 style="width: 130px; text-align: left; margin-left: 10px"> UBICACION </h3>
+            <h3 style="margin-left: 40px;"> : </h3>
+            <h3> <%= @project.location %> </h3>
+        </div>
+
+        <div style="display: flex;gap:10px;align-items: center;height:25px; margin-bottom:8px;margin-top:5px">
+            <h3 style="width: 130px; text-align: left; margin-left: 10px"> FECHA </h3>
+            <h3 style="margin-left: 40px;"> : </h3>
+            <h3> <%= @project.date %> </h3>
+        </div>
+    
+    </div>
+
+    <table style="margin:0 auto;" class="table table-bordered">
+    <thead>
+    <tr>
+        <th style="text-align: center;">ITEM</th>
+        <th style="text-align: center;">DESCRIPCION</th>
+        <th style="text-align: center; width:30px;">UNID.</th>
+        <th style="text-align: center;width:30px;">CANT.</th>
+        <th style="text-align: center;width:90px;">P. UNIT. $</th>
+        <th style="text-align: center;">TOTAL $</th>
+    </tr>
+    </thead>
+    <tbody>
+        <% @items.each do |element| %>
+            <% item = element[0] %>
+            <% index = element[1] %>
+            
+            <% if item.class.name == "Item"%>
+                <tr>
+                    <th><h4><%="#{index}."%></h4></th>
+                    <th style="line-height: 40px;"><h4><strong><%=item.name%></strong></h4></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <% if item.isMain == true %>
+                        <th style="text-align: right;"> <h4> <%= "#{itemExpenses(item).to_s}" %> </h4> </th>
+                    <% else %>
+
+                    <th></th>
+
+                    <% end %>
+
+                </tr> 
+            <% else %>
+
+                <tr>
+                    <th><h4><%="#{index}."%></h4></th>
+                    <th style="line-height: 40px;"><h4><%=item.material.name%></h4></th>
+                    <th style="text-align: center;"><h4><%=item.material.unity%></h4></th>
+                    <th><h4><%=item.quantity%></h4></th>
+                    <th><h4><%=item.material.price%></h4></th>
+                    <th style="text-align: right;"><h4><%=item.material.price * item.quantity%></h4></th>
+                </tr>
+
+            <% end %>
+        <% end %>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th style="text-align: center;"><h4><%="#{projectExpenses(@project)}"%></h4></th>
+        </tr>
+    </tbody>
+    </table>
+
+</div>
+
+
+</body>
+</html>
