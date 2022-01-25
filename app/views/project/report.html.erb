@@ -95,14 +95,119 @@
 
             <% end %>
         <% end %>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th style="text-align: center;"><h4><%="#{projectExpenses(@project)}"%></h4></th>
-        </tr>
+        
+    </tbody>
+    </table>
+
+    <br>
+
+    <table class="table table-bordered" style="margin-left:120px; max-width: 90%">
+    <tbody>
+
+            <tr>
+                <th style="background-color:rgb(214, 212, 212);"> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> SUBTOTAL VALOR NETO </strong> </h4>
+
+                    <h4> <%="#{projectExpenses(@project)}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
+            <tr>
+                <th> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> GASTOS GENERALES </strong> </h4>
+
+                    <h4> <%="#{(projectExpenses(@project) * @project.generalExpensesFactor).round(3)}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
+            <tr>
+                <th> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> UTILIDADES </strong> </h4>
+
+                    <h4> <%="#{(projectExpenses(@project) * @project.utilitiesFactor).round(3)}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
+            <tr>
+                <th style="background-color:rgb(214, 212, 212);"> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> SUBTOTAL COSTO DIRECTO </strong> </h4>
+
+                    <% total = (projectExpenses(@project) + projectExpenses(@project) * @project.utilitiesFactor +  projectExpenses(@project) * @project.generalExpensesFactor).round(3) %>
+
+                    <h4> <%="#{total}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
+            <tr>
+                <th> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> IVA </strong> </h4>
+
+                    <h4> <%="#{(projectExpenses(@project) * 0.19).round(3)}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
+            <tr>
+                <th style="background-color:rgb(214, 212, 212);"> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> TOTAL PRESUPUESTO </strong> </h4>
+
+                    <h4> <%="#{total + (projectExpenses(@project) * 0.19).round(3)}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
     </tbody>
     </table>
 

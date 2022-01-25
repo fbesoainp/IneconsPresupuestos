@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "jquery.dataTables.min.js" %>
+  <% end %>
+<div class="panel panel-default">
+  <div class="panel-heading", style="margin-bottom: 10px">
+  <div class="panel-heading-container">
+  <h4> <strong> Materiales </strong> </h4>
+  </div>
+  </div>
+<table class= "table" id="example", style= "max-width: 98%;">
+    <thead>
+    <tr>
+        <th >Codigo</th>
+        <th >Nombre</th>
+        <th >Unidad</th>
+        <th >Descripcion</th>
+        <th >Categoria</th>
+        <th >Precio</th>
+        <th >Cantidad</th>
+        <th >Total</th>
+        <th>%Incidencia</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @materials.each do |expense| %>
+    <% material = expense[0] %>
+    <% quantity = expense[1] %>
+
+    <tr>
+        <td><%= material.code %></td>  
+        <td><%= material.name %></td>
+        <td><%= material.unity %></td>
+        <td><%= material.description %></td>
+        <td><%= material.category %></td>
+        <td><%= material.price %></td>
+        <td><%= quantity %></td>
+        <td><%= quantity *  material.price %></td>
+        <td><%= ((quantity *  material.price * 100)/ projectExpenses(@project)).round(2) %></td>
+        
+
+    </tr>
+    
+    <% end %>
+    </tbody>
+        <tfoot>
+            <tr>
+                <th >Codigo</th>
+                <th >Nombre</th>
+                <th >Unidad</th>
+                <th >Descripcion</th>
+                <th >Categoria</th>
+                <th >Precio</th>
+                <th >Cantidad</th>
+                <th ><%= "Total: #{projectExpenses(@project)}" %></th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+
+<br>
+<%= button_to "Volver", projectShow_path(@project.id), :method => :get, class: "btn btn-primary" %>

@@ -100,5 +100,17 @@ module ItemHelper
             end 
         end
     end
+
+    def itemMaterials(item)
+        expenses = item.expenses
+        expenses.each do |expense| 
+            @expenses.append(expense)
+        end
+        items = item.items 
+        items.each do |subItem|
+            itemMaterials(subItem)
+        end
+            
+    end
         
 end

@@ -68,20 +68,10 @@ class ProjectController < ApplicationController
         render layout: false
     end
 
-    def downloadReport
-        html_string = render_to_string(
-        {
-            :template =>'projects/report.html.erb',
-            locals: { id: params[:id] }
-        })
-
-        pdf = Grover.new(html_string, format: 'A4', display_url: "http://localhost").to_pdf
-
-        respond_to do |format|
-            format.html
-            format.pdf do
-                send_data(pdf, disposition: 'inline', filename: "Show_ID_#{params[:id]}", type: 'application/pdf')
-            end
-        end
+    def materials
+        @expenses = []
+        @materials = []
+        @project = Project.find(params[:id])
+        helpers.projectMaterials(@project)
     end
 end

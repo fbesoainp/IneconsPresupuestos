@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   delete "projects/:id", to: "project#delete", as: 'projectDelete'
   get "projects/:id/expenses", to: "project#expenses", as: 'projectExpenses'
   get "projects/:id/report", to: "project#report", as: 'projectReport'
-  get "projects/:id/report/download", to: "project#downloadReport", as: 'downloadReport'
+  get "projects/:id/materials", to: "project#materials", as: 'projectMaterials'
   resources :projects
 
   #items 
