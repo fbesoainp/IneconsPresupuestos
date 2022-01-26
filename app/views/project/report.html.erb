@@ -95,6 +95,15 @@
 
             <% end %>
         <% end %>
+
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th style="text-align: right;"><h4><%="#{projectExpenses(@project)}"%></h4></th>
+        </tr>
         
     </tbody>
     </table>
@@ -103,6 +112,44 @@
 
     <table class="table table-bordered" style="margin-left:120px; max-width: 90%">
     <tbody>
+
+            <tr>
+                <th> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> FACTOR MATERIALES </strong> </h4>
+
+                    <% materials = (materialsFactorCalculator(@items) * @project.materialsFactor).round(3) %>
+
+                    <h4> <%="#{materials}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
+
+            <tr>
+                <th> 
+
+                <div style="display:grid;
+                grid-template-columns: repeat(2, max-content);
+                width:100%;
+                justify-content:space-between;">
+                
+                    <h4> <strong> FACTOR MANO DE OBRA </strong> </h4>
+
+                    <% workForce = (workForceFactorCalculator(@items) * @project.workForceFactor).round(3) %>
+
+                    <h4> <%="#{workForce}"%> </h4>
+
+                </div>
+                
+                </th>
+            </tr>
 
             <tr>
                 <th style="background-color:rgb(214, 212, 212);"> 
@@ -114,7 +161,9 @@
                 
                     <h4> <strong> SUBTOTAL VALOR NETO </strong> </h4>
 
-                    <h4> <%="#{projectExpenses(@project)}"%> </h4>
+                    <% subTotal = projectExpenses(@project) + materials + workForce %>
+
+                    <h4> <%="#{subTotal}"%> </h4>
 
                 </div>
                 
@@ -131,7 +180,7 @@
                 
                     <h4> <strong> GASTOS GENERALES </strong> </h4>
 
-                    <h4> <%="#{(projectExpenses(@project) * @project.generalExpensesFactor).round(3)}"%> </h4>
+                    <h4> <%="#{(subTotal * @project.generalExpensesFactor).round(3)}"%> </h4>
 
                 </div>
                 
@@ -148,7 +197,7 @@
                 
                     <h4> <strong> UTILIDADES </strong> </h4>
 
-                    <h4> <%="#{(projectExpenses(@project) * @project.utilitiesFactor).round(3)}"%> </h4>
+                    <h4> <%="#{(subTotal * @project.utilitiesFactor).round(3)}"%> </h4>
 
                 </div>
                 
@@ -165,7 +214,7 @@
                 
                     <h4> <strong> SUBTOTAL COSTO DIRECTO </strong> </h4>
 
-                    <% total = (projectExpenses(@project) + projectExpenses(@project) * @project.utilitiesFactor +  projectExpenses(@project) * @project.generalExpensesFactor).round(3) %>
+                    <% total = (subTotal + subTotal * @project.utilitiesFactor +  subTotal * @project.generalExpensesFactor).round(3) %>
 
                     <h4> <%="#{total}"%> </h4>
 
@@ -184,7 +233,7 @@
                 
                     <h4> <strong> IVA </strong> </h4>
 
-                    <h4> <%="#{(projectExpenses(@project) * 0.19).round(3)}"%> </h4>
+                    <h4> <%="#{(total * 0.19).round(3)}"%> </h4>
 
                 </div>
                 
@@ -201,7 +250,7 @@
                 
                     <h4> <strong> TOTAL PRESUPUESTO </strong> </h4>
 
-                    <h4> <%="#{total + (projectExpenses(@project) * 0.19).round(3)}"%> </h4>
+                    <h4> <%="#{total + (total * 0.19).round(3)}"%> </h4>
 
                 </div>
                 

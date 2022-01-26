@@ -51,5 +51,31 @@ module ProjectHelper
             @materials.append(element)
         end
     end
+
+    def materialsFactorCalculator(items)
+        total = 0
+        items.each do |item|
+            expense = item[0]
+            if expense.class.name != "Item"
+                if expense.material.category == "Materiales"
+                    total += expense.material.price * expense.quantity
+                end
+            end
+        end
+        return total
+    end
+
+    def workForceFactorCalculator(items)
+        total = 0
+        items.each do |item|
+            expense = item[0]
+            if expense.class.name != "Item"
+                if expense.material.category == "Mano de Obra"
+                    total += expense.material.price * expense.quantity
+                end
+            end
+        end
+        return total
+    end
    
 end

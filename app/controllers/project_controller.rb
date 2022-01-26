@@ -74,4 +74,5 @@ class ProjectController < ApplicationController
         @project = Project.find(params[:id])
         helpers.projectMaterials(@project)
     end
+    
 end

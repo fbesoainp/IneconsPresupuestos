@@ -12,9 +12,9 @@ instalar_server.bat
 O ejecutar los siguientes comandos:
 ```
 docker-compose build
-docker-compose run web db:create
-docker-compose run web db:migrate
-docker-compose run web db:seed
+docker-compose run web rake db:create
+docker-compose run web rake db:migrate
+docker-compose run web rake db:seed
 ```
 3. Ejecutar archivo:
 ```
